@@ -1,0 +1,119 @@
+definitions:
+  models.User:
+    properties:
+      avatar_url:
+        type: string
+      bio:
+        type: string
+      created_at:
+        type: string
+      email:
+        type: string
+      header_url:
+        type: string
+      id:
+        type: integer
+      password:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  models.UserResponse:
+    properties:
+      avatar_url:
+        type: string
+      bio:
+        type: string
+      email:
+        type: string
+      header_url:
+        type: string
+      id:
+        type: integer
+    type: object
+  models.UserSignupRequest:
+    properties:
+      email:
+        example: test@example.com
+        type: string
+      password:
+        example: password123
+        minLength: 6
+        type: string
+    required:
+    - email
+    - password
+    type: object
+info:
+  contact: {}
+paths:
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: ユーザー認証して JWT を Cookie にセットする
+      parameters:
+      - description: ログイン情報
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: ログイン
+      tags:
+      - auth
+  /logout:
+    post:
+      description: Cookie を削除することでログアウト
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+      summary: ログアウト
+      tags:
+      - auth
+  /signup:
+    post:
+      consumes:
+      - application/json
+      description: ユーザーを新規作成して返す
+      parameters:
+      - description: ユーザー情報
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.UserSignupRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: 新規ユーザー登録
+      tags:
+      - auth
+swagger: "2.0"

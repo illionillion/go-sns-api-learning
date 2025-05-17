@@ -24,6 +24,17 @@ func NewUserController(uu usecase.IUserUsecase) IUserController {
 	return &userController{uu}
 }
 
+// SignUp godoc
+// @Summary      新規ユーザー登録
+// @Description  ユーザーを新規作成して返す
+// @Tags         auth
+// @Accept       json
+// @Produce      json
+// @Param        user body models.UserSignupRequest true "ユーザー情報"
+// @Success      201 {object} models.UserResponse
+// @Failure      400 {object} string
+// @Failure      500 {object} string
+// @Router       /signup [post]
 func (uc *userController) SignUp(c echo.Context) error {
 	user := models.User{}
 	if err := c.Bind(&user); err != nil {
@@ -35,6 +46,18 @@ func (uc *userController) SignUp(c echo.Context) error {
 	}
 	return c.JSON(http.StatusCreated, userRes)
 }
+
+// LogIn godoc
+// @Summary      ログイン
+// @Description  ユーザー認証して JWT を Cookie にセットする
+// @Tags         auth
+// @Accept       json
+// @Produce      plain
+// @Param        user body models.User true "ログイン情報"
+// @Success      200
+// @Failure      400 {object} string
+// @Failure      500 {object} string
+// @Router       /login [post]
 func (uc *userController) LogIn(c echo.Context) error {
 	user := models.User{}
 	if err := c.Bind(&user); err != nil {
@@ -57,6 +80,14 @@ func (uc *userController) LogIn(c echo.Context) error {
 	c.SetCookie(cookie)
 	return c.NoContent(http.StatusOK)
 }
+
+// LogOut godoc
+// @Summary      ログアウト
+// @Description  Cookie を削除することでログアウト
+// @Tags         auth
+// @Produce      plain
+// @Success      200
+// @Router       /logout [post]
 func (uc *userController) LogOut(c echo.Context) error {
 	cookie := new(http.Cookie)
 	cookie.Name = "token"

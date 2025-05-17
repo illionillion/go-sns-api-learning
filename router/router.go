@@ -3,6 +3,8 @@ package router
 import (
 	"github.com/illionillion/go-sns-api-learning/controller"
 	"github.com/labstack/echo/v4"
+	echoSwagger "github.com/swaggo/echo-swagger"
+    _ "github.com/illionillion/go-sns-api-learning/docs" // 生成されたSwagger docsのパッケージ
 )
 
 func NewRouter(uc controller.IUserController) *echo.Echo {
@@ -10,6 +12,10 @@ func NewRouter(uc controller.IUserController) *echo.Echo {
 	e.GET("/", func(c echo.Context) error {
 		return c.String(200, "Hello, World!")
 	})
+
+	// Swagger UIのルートを登録
+	e.GET("/swagger/*", echoSwagger.WrapHandler)
+
 	e.POST("/signup", uc.SignUp)
 	e.POST("/login", uc.LogIn)
 	e.POST("/logout", uc.LogOut)

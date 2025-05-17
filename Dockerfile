@@ -8,9 +8,10 @@ WORKDIR /app
 
 COPY . .
 
-# air をグローバルに入れる
+# air, swag をインストール（GOBIN を /usr/local/bin に設定）
 ENV GOBIN=/usr/local/bin
 RUN go mod tidy && \
-    go install github.com/cosmtrek/air@v1.49.0
+    go install github.com/cosmtrek/air@v1.49.0 && \
+    go install github.com/swaggo/swag/cmd/swag@latest
 
 CMD ["make", "dev"]
