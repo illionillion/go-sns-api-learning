@@ -18,6 +18,10 @@ func main() {
 	userRepository := repository.NewUserRepository(db)
 	userUsecase := usecase.NewUserUsecase(userRepository)
 	userController := controller.NewUserController(userUsecase)
+	// swaggerのリンクのログ出力
+	domain := "http://" + os.Getenv("API_DOMAIN")
+	port := os.Getenv("PORT")
+	fmt.Printf("Swagger UI: %s:%s/swagger/index.html\n", domain, port)
 	e := router.NewRouter(userController)
-	e.Logger.Fatal(e.Start(":" + os.Getenv("PORT")))
+	e.Logger.Fatal(e.Start(":" + port))
 }

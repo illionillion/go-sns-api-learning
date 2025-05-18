@@ -1,22 +1,16 @@
 definitions:
-  models.User:
+  models.UserLoginRequest:
     properties:
-      avatar_url:
-        type: string
-      bio:
-        type: string
-      created_at:
-        type: string
       email:
+        example: test@example.com
         type: string
-      header_url:
-        type: string
-      id:
-        type: integer
       password:
+        example: password123
+        minLength: 6
         type: string
-      updated_at:
-        type: string
+    required:
+    - email
+    - password
     type: object
   models.UserResponse:
     properties:
@@ -58,7 +52,7 @@ paths:
         name: user
         required: true
         schema:
-          $ref: '#/definitions/models.User'
+          $ref: '#/definitions/models.UserLoginRequest'
       produces:
       - text/plain
       responses:

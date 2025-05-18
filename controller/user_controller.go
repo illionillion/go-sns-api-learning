@@ -53,7 +53,7 @@ func (uc *userController) SignUp(c echo.Context) error {
 // @Tags         auth
 // @Accept       json
 // @Produce      plain
-// @Param        user body models.User true "ログイン情報"
+// @Param        user body models.UserLoginRequest true "ログイン情報"
 // @Success      200
 // @Failure      400 {object} string
 // @Failure      500 {object} string

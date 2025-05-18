@@ -53,6 +53,14 @@ type UserSignupRequest struct {
 }
 
 /*
+ユーザーのログインリクエスト
+*/
+type UserLoginRequest struct {
+	Email    string `json:"email" validate:"required,email" example:"test@example.com"`
+	Password string `json:"password" validate:"required,min=6" example:"password123"`
+}
+
+/*
 APIで返すユーザーのデータ
 */
 type UserResponse struct {
