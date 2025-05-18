@@ -131,7 +131,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Profile"
+                    "User"
                 ],
                 "summary": "ユーザー情報取得",
                 "parameters": [

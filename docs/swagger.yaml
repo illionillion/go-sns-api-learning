@@ -138,5 +138,5 @@ paths:
             type: string
       summary: ユーザー情報取得
       tags:
-      - Profile
+      - User
 swagger: "2.0"
