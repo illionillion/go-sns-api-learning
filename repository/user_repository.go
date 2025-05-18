@@ -9,6 +9,7 @@ import (
 type IUserRepository interface {
 	GetUserByEmail(user *models.User, email string) error
 	CreateUser(user *models.User) error
+	GetUserById(user *models.User, userId string) error
 }
 
 type userRepository struct {
@@ -17,6 +18,14 @@ type userRepository struct {
 
 func NewUserRepository(db *gorm.DB) IUserRepository {
 	return &userRepository{db}
+}
+
+func (ur *userRepository) GetUserById(user *models.User, userId string) error {
+	// ユーザーをIDで検索、ヒットすればnil、しなければerrorを返す
+	if err := ur.db.Where("id=?", userId).First(user).Error; err != nil {
+		return err
+	}
+	return nil
 }
 
 func (ur *userRepository) GetUserByEmail(user *models.User, email string) error {

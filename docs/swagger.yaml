@@ -110,4 +110,33 @@ paths:
       summary: 新規ユーザー登録
       tags:
       - auth
+  /users/{userId}:
+    get:
+      consumes:
+      - application/json
+      description: ユーザーIDを指定してユーザー情報を取得する
+      parameters:
+      - description: ユーザーID
+        in: path
+        name: userId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: ユーザー情報取得
+      tags:
+      - Profile
 swagger: "2.0"

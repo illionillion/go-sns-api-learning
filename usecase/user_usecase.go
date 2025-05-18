@@ -13,6 +13,7 @@ import (
 type IUserUsecase interface {
 	Signup(user models.User) (models.UserResponse, error)
 	Login(user models.User) (string, error)
+	GetUser(userId string) (models.UserResponse, error)
 }
 
 type userUsecase struct {
@@ -21,6 +22,20 @@ type userUsecase struct {
 
 func NewUserUsecase(ur repository.IUserRepository) IUserUsecase {
 	return &userUsecase{ur}
+}
+
+func (uu *userUsecase) GetUser(userId string) (models.UserResponse, error) {
+	user := models.User{}
+	if err := uu.ur.GetUserById(&user, userId); err != nil {
+		return models.UserResponse{}, err
+	}
+	return models.UserResponse{
+		ID:        user.ID,
+		Email:     user.Email,
+		AvatarURL: user.AvatarURL,
+		HeaderURL: user.HeaderURL,
+		Bio:       user.Bio,
+	}, nil
 }
 
 // サインアップの処理

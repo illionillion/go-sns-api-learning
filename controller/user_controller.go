@@ -14,6 +14,7 @@ type IUserController interface {
 	SignUp(c echo.Context) error
 	LogIn(c echo.Context) error
 	LogOut(c echo.Context) error
+	GetUser(c echo.Context) error
 }
 
 type userController struct {
@@ -22,6 +23,26 @@ type userController struct {
 
 func NewUserController(uu usecase.IUserUsecase) IUserController {
 	return &userController{uu}
+}
+
+// GetUser godoc
+// @Summary      ユーザー情報取得
+// @Description  ユーザーIDを指定してユーザー情報を取得する
+// @Tags         User
+// @Accept       json
+// @Produce      json
+// @Param        userId path string true "ユーザーID"
+// @Success      200 {object} models.UserResponse
+// @Failure      400 {object} string
+// @Failure      500 {object} string
+// @Router       /users/{userId} [get]
+func (uc *userController) GetUser(c echo.Context) error {
+	userId := c.Param("userId")
+	user, err := uc.uu.GetUser(userId)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err.Error())
+	}
+	return c.JSON(http.StatusOK, user)
 }
 
 // SignUp godoc

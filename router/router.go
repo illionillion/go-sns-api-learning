@@ -19,6 +19,7 @@ func NewRouter(uc controller.IUserController) *echo.Echo {
 	e.POST("/signup", uc.SignUp)
 	e.POST("/login", uc.LogIn)
 	e.POST("/logout", uc.LogOut)
+	e.GET("/users/:userId", uc.GetUser)
 	// t := e.Group("/tasks")
 	// t.Use(echojwt.WithConfig(echojwt.Config{
 	// 	SigningKey: []byte(os.Getenv("SECRET")),
