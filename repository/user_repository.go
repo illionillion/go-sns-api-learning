@@ -10,7 +10,7 @@ type IUserRepository interface {
 	GetUserByEmail(user *models.User, email string) error
 	CreateUser(user *models.User) error
 	GetUserById(user *models.User, userId string) error
-	UpdateUser(userId string, user *models.User) error
+	UpdateUser(userId string, user models.UserUpdateRequest) (models.User, error)
 }
 
 type userRepository struct {
@@ -45,14 +45,21 @@ func (ur *userRepository) CreateUser(user *models.User) error {
 	return nil
 }
 
-func (ur *userRepository) UpdateUser(userId string, user *models.User) error {
-	// ユーザーをIDで検索、ヒットすればnil、しなければerrorを返す
-	if err := ur.db.Where("id=?", userId).First(user).Error; err != nil {
-		return err
+func (ur *userRepository) UpdateUser(userId string, userUpdate models.UserUpdateRequest) (models.User, error) {
+	// 空文字も含めて更新するためmapで渡す
+	updateData := map[string]any{
+		"avatar_url": userUpdate.AvatarURL,
+		"header_url": userUpdate.HeaderURL,
+		"bio":        userUpdate.Bio,
 	}
-	// userのデータを更新、成功すればnil、失敗すればerrorを返す
-	if err := ur.db.Save(user).Error; err != nil {
-		return err
+	if err := ur.db.Model(&models.User{}).Where("id=?", userId).Updates(updateData).Error; err != nil {
+		return models.User{}, err
 	}
-	return nil
+	// 更新したユーザーを取得
+	var user models.User
+	if err := ur.db.Where("id=?", userId).First(&user).Error; err != nil {
+		return models.User{}, err
+	}
+	// 更新したユーザーを返す
+	return user, nil
 }

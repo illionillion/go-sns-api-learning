@@ -60,11 +60,11 @@ func (uc *userController) GetUser(c echo.Context) error {
 // @Router       /users/{userId} [put]
 func (uc *userController) UpdateUser(c echo.Context) error {
 	userId := c.Param("userId")
-	user := models.User{}
-	if err := c.Bind(&user); err != nil {
+	userUpdate := models.UserUpdateRequest{}
+	if err := c.Bind(&userUpdate); err != nil {
 		return c.JSON(http.StatusBadRequest, err.Error())
 	}
-	userRes, err := uc.uu.UpdateUser(userId, user)
+	userRes, err := uc.uu.UpdateUser(userId, userUpdate)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, err.Error())
 	}
