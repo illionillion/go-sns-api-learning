@@ -15,6 +15,7 @@ type IUserController interface {
 	LogIn(c echo.Context) error
 	LogOut(c echo.Context) error
 	GetUser(c echo.Context) error
+	UpdateUser(c echo.Context) error
 }
 
 type userController struct {
@@ -43,6 +44,31 @@ func (uc *userController) GetUser(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, err.Error())
 	}
 	return c.JSON(http.StatusOK, user)
+}
+
+// UpdateUser godoc
+// @Summary      ユーザー情報更新
+// @Description  ユーザーIDを指定してユーザー情報を更新する
+// @Tags         User
+// @Accept       json
+// @Produce      json
+// @Param        userId path string true "ユーザーID"
+// @Param        user body models.UserUpdateRequest true "ユーザー情報"
+// @Success      200 {object} models.UserResponse
+// @Failure      400 {object} string
+// @Failure      500 {object} string
+// @Router       /users/{userId} [put]
+func (uc *userController) UpdateUser(c echo.Context) error {
+	userId := c.Param("userId")
+	user := models.User{}
+	if err := c.Bind(&user); err != nil {
+		return c.JSON(http.StatusBadRequest, err.Error())
+	}
+	userRes, err := uc.uu.UpdateUser(userId, user)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err.Error())
+	}
+	return c.JSON(http.StatusOK, userRes)
 }
 
 // SignUp godoc

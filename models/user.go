@@ -60,6 +60,12 @@ type UserLoginRequest struct {
 	Password string `json:"password" validate:"required,min=6" example:"password123"`
 }
 
+type UserUpdateRequest struct {
+	AvatarURL string `json:"avatar_url" validate:"required,url" example:"https://example.com/avatar.jpg"`
+	HeaderURL string `json:"header_url" validate:"required,url" example:"https://example.com/header.jpg"`
+	Bio       string `json:"bio" validate:"required,max=200" example:"This is my bio."`
+}
+
 /*
 APIで返すユーザーのデータ
 */

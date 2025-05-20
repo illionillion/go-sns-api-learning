@@ -14,6 +14,7 @@ type IUserUsecase interface {
 	Signup(user models.User) (models.UserResponse, error)
 	Login(user models.User) (string, error)
 	GetUser(userId string) (models.UserResponse, error)
+	UpdateUser(userId string, user models.User) (models.UserResponse, error)
 }
 
 type userUsecase struct {
@@ -27,6 +28,19 @@ func NewUserUsecase(ur repository.IUserRepository) IUserUsecase {
 func (uu *userUsecase) GetUser(userId string) (models.UserResponse, error) {
 	user := models.User{}
 	if err := uu.ur.GetUserById(&user, userId); err != nil {
+		return models.UserResponse{}, err
+	}
+	return models.UserResponse{
+		ID:        user.ID,
+		Email:     user.Email,
+		AvatarURL: user.AvatarURL,
+		HeaderURL: user.HeaderURL,
+		Bio:       user.Bio,
+	}, nil
+}
+
+func (uu *userUsecase) UpdateUser(userId string, user models.User) (models.UserResponse, error) {
+	if err := uu.ur.UpdateUser(userId, &user); err != nil {
 		return models.UserResponse{}, err
 	}
 	return models.UserResponse{

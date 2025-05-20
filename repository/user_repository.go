@@ -10,6 +10,7 @@ type IUserRepository interface {
 	GetUserByEmail(user *models.User, email string) error
 	CreateUser(user *models.User) error
 	GetUserById(user *models.User, userId string) error
+	UpdateUser(userId string, user *models.User) error
 }
 
 type userRepository struct {
@@ -39,6 +40,18 @@ func (ur *userRepository) GetUserByEmail(user *models.User, email string) error 
 func (ur *userRepository) CreateUser(user *models.User) error {
 	// userのデータを作成、成功すればnil、失敗すればerrorを返す
 	if err := ur.db.Create(user).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
+func (ur *userRepository) UpdateUser(userId string, user *models.User) error {
+	// ユーザーをIDで検索、ヒットすればnil、しなければerrorを返す
+	if err := ur.db.Where("id=?", userId).First(user).Error; err != nil {
+		return err
+	}
+	// userのデータを更新、成功すればnil、失敗すればerrorを返す
+	if err := ur.db.Save(user).Error; err != nil {
 		return err
 	}
 	return nil
