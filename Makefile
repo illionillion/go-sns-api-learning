@@ -6,11 +6,14 @@ export
 
 # マイグレーション実行
 migrate:
-	go run migrations/migrations.go
+	go run ./migrations/migrations.go
 
 # Swagger ドキュメント生成
 swag:
-	swag init -g cmd/main.go --parseDependency --parseInternal
+	swag init -g ./cmd/main.go --parseDependency --parseInternal
+
+build:
+	go build -o ./tmp/main ./cmd/main.go
 
 # 開発サーバー起動（migrate -> swag -> air）
 dev: migrate swag
